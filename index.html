@@ -571,6 +571,48 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
   }
 }
 
+
+.imageModal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  background:rgba(0,0,0,.55);
+  padding:18px;
+  overflow:auto;
+}
+.imageModalInner{
+  max-width:760px;
+  margin:20px auto;
+  background:#fffdf8;
+  border-radius:22px;
+  padding:16px;
+  box-shadow:0 18px 60px rgba(0,0,0,.28);
+}
+.imageModalTitle{
+  font-weight:900;
+  font-size:20px;
+  margin-bottom:6px;
+}
+.imageModalText{
+  color:var(--muted);
+  font-weight:800;
+  font-size:13px;
+  line-height:1.6;
+  margin-bottom:12px;
+}
+.imageModal img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:16px;
+  border:1.5px solid #ddd4c7;
+  background:#fff;
+  margin-bottom:12px;
+}
+.imageModal.hidden{
+  display:none!important;
+}
+
 </style>
 </head>
 <body>
@@ -696,6 +738,14 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
         <div class="footer">※「譲り」は上の欄、「求む」は下の欄に分けて表示します。表の「譲求」「状態」は後から変更できます。PNG保存時は入力欄なしの見やすい表示になります。<br>※メンバー辞書で表記ゆれをチェックできます。例：西崎 → 西﨑美空。</div>
       </section>
     </main>
+  </div>
+</div>
+<div id="imageModal" class="imageModal hidden">
+  <div class="imageModalInner">
+    <div class="imageModalTitle">画像ができました</div>
+    <div class="imageModalText">画像を長押しして「写真に保存」または「画像を保存」を選んでください。</div>
+    <img id="modalImage" alt="保存用画像">
+    <button id="closeImageModal" class="secondary">閉じる</button>
   </div>
 </div>
 <datalist id="memberList"></datalist>
@@ -1191,31 +1241,80 @@ savePngBtn.onclick=async()=>{
   a.download="trade_check_list.png";
   a.click();
 };
+function showImageModal(dataUrl){
+  modalImage.src = dataUrl;
+  imageModal.classList.remove("hidden");
+}
+closeImageModal.onclick=()=>imageModal.classList.add("hidden");
+
 sharePngBtn.onclick=async()=>{
+  // iPhone Safariでは非同期処理後の新規タブがブロックされやすいので、
+  // クリック直後に先に空タブを確保しておく。
+  let preOpened = null;
+  try{
+    preOpened = window.open("", "_blank");
+    if(preOpened){
+      preOpened.document.write("<!doctype html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'><title>画像作成中...</title></head><body style='font-family:sans-serif;padding:20px'>画像を作成中です...</body></html>");
+      preOpened.document.close();
+    }
+  }catch(e){
+    preOpened = null;
+  }
+
   try{
     const canvas = await makeExportCanvas();
+    const dataUrl = canvas.toDataURL("image/png");
     const blob = await canvasToBlob(canvas);
     const file = new File([blob], "trade_check_list.png", {type:"image/png"});
+
+    // Web Share が使える場合は共有シートを優先。
     if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
-      await navigator.share({
-        files:[file],
-        title:titleInput.value || "グッズ交換チェックリスト",
-        text:subInput.value || ""
-      });
-    }else{
-      const url = URL.createObjectURL(blob);
-      const win = window.open(url, "_blank");
-      if(!win){
-        const a=document.createElement("a");
-        a.href=url;
-        a.download="trade_check_list.png";
-        a.click();
+      try{
+        await navigator.share({
+          files:[file],
+          title:titleInput.value || "グッズ交換チェックリスト",
+          text:subInput.value || ""
+        });
+        if(preOpened && !preOpened.closed) preOpened.close();
+        return;
+      }catch(shareErr){
+        // キャンセルやSafari側の失敗時は画像表示にフォールバック
       }
-      setTimeout(()=>URL.revokeObjectURL(url), 60000);
-      alert("共有機能が使えない環境です。開いた画像を長押しして「写真に保存」を選んでください。");
+    }
+
+    const htmlForImage = `<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>保存用画像</title>
+<style>
+body{margin:0;padding:14px;background:#fffdf8;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#1f2933}
+p{font-weight:700;line-height:1.6;color:#607080}
+img{width:100%;height:auto;border-radius:14px;border:1px solid #ddd4c7}
+</style>
+</head>
+<body>
+<p>画像を長押しして「写真に保存」または「画像を保存」を選んでください。</p>
+<img src="${dataUrl}" alt="保存用画像">
+</body>
+</html>`;
+
+    if(preOpened && !preOpened.closed){
+      preOpened.document.open();
+      preOpened.document.write(htmlForImage);
+      preOpened.document.close();
+    }else{
+      showImageModal(dataUrl);
     }
   }catch(err){
-    alert("保存/共有に失敗しました。通常のPNG画像保存を試してください。");
+    if(preOpened && !preOpened.closed){
+      preOpened.document.open();
+      preOpened.document.write("<p>画像作成に失敗しました。通常のPNG画像保存を試してください。</p>");
+      preOpened.document.close();
+    }else{
+      alert("保存/共有に失敗しました。通常のPNG画像保存を試してください。");
+    }
     console.error(err);
   }
 };
