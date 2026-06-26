@@ -29,7 +29,7 @@ button.good{background:var(--green)}
 button.main{background:var(--main)}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .small{font-size:12px;color:var(--muted);line-height:1.65}
-.badge{display:inline-block;color:#fff;border-radius:999px;padding:6px 10px;font-weight:900;min-width:54px;text-align:center}
+.badge{display:inline-block;color:#fff;border-radius:999px;padding:5px 10px;font-weight:900;min-width:48px;text-align:center}
 .badge.A,.badge.SR,.badge.S{background:var(--blue)}
 .badge.B,.badge.R{background:var(--orange)}
 .badge.C,.badge.N{background:var(--green)}
@@ -54,6 +54,39 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
 .modeSel{min-width:76px}
 .memberSel{min-width:130px;font-weight:900}
 .note{min-width:126px}
+.itemImgThumb{
+  width:54px;
+  height:54px;
+  object-fit:cover;
+  border-radius:12px;
+  border:1.5px solid #ddd4c7;
+  background:#fff;
+}
+.itemImgBox{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.imageInput{
+  max-width:180px;
+}
+.exportImg{
+  width:72px;
+  height:72px;
+  object-fit:cover;
+  border-radius:14px;
+  border:1.5px solid #ddd4c7;
+  background:#fff;
+  flex:0 0 auto;
+}
+.exportCard.withImg .exportTop{
+  align-items:center;
+}
+.exportTextBlock{
+  min-width:0;
+  flex:1;
+}
 .actions{white-space:nowrap}
 .no{font-weight:900;color:var(--muted)}
 .hidden{display:none!important}
@@ -66,59 +99,59 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
 .exportTitle{
   background:var(--soft);
   border:2px solid #f0d7a5;
-  border-radius:24px;
-  padding:18px 22px;
-  margin-bottom:14px;
+  border-radius:18px;
+  padding:12px 16px;
+  margin-bottom:8px;
 }
 .exportTitle h1{
-  margin:0 0 8px;
+  margin:0 0 4px;
   color:var(--main);
-  font-size:34px;
-  line-height:1.25;
+  font-size:26px;
+  line-height:1.15;
 }
 .exportTitle p{
   margin:0;
   color:var(--muted);
-  font-weight:900;
-  font-size:18px;
-  line-height:1.55;
+  font-weight:800;
+  font-size:14px;
+  line-height:1.3;
 }
-.exportList{display:grid;gap:10px}
+.exportList{display:grid;gap:8px}
 .exportCard{
   border:1.5px solid #ddd4c7;
-  border-radius:18px;
+  border-radius:16px;
   background:#fff;
-  padding:12px 14px;
+  padding:10px 14px;
 }
 .exportTop{
   display:flex;
   align-items:center;
   gap:8px;
   flex-wrap:wrap;
-  margin-bottom:8px;
+  margin-bottom:4px;
 }
 .exportNo{font-weight:900;color:var(--muted);min-width:42px}
-.exportMember{font-size:20px;font-weight:900}
-.exportMeta{font-size:14px;line-height:1.6;color:var(--ink)}
+.exportMember{font-size:19px;font-weight:900}
+.exportMeta{font-size:13px;line-height:1.55;color:var(--ink)}
 .exportStatus{
   margin-left:auto;
   font-weight:900;
   color:var(--muted);
 }
 .previewOnly #captureArea{
-  width:1000px;
-  max-width:1000px;
+  width:640px;
+  max-width:640px;
 }
 .previewOnly .cards{
   grid-template-columns:repeat(4,1fr)!important;
 }
 .previewOnly #captureContent{
-  width:1000px;
-  padding:4px;
+  width:640px;
+  padding:2px;
 }
 .previewMode,.previewStatus,.previewMemo{font-weight:900}
 .sectionTitle{
-  margin:16px 0 8px;
+  margin:10px 0 6px;
   padding:10px 14px;
   border-radius:16px;
   font-weight:900;
@@ -129,7 +162,7 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
   align-items:center;
 }
 .sectionTitle.offer{background:#c56635}
-.sectionTitle.want{background:#4d85c5}
+.sectionTitle.want{background:#2e9d49}
 .sectionTitle.other{background:#7873a8}
 .footer{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.7}
 .pill{display:inline-block;background:#f1f5f9;border:1px solid #d7dde6;border-radius:999px;padding:5px 9px;margin:3px 3px 0 0;font-size:12px;font-weight:800}
@@ -142,6 +175,402 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
   .checkcell{text-align:left;width:auto}.checkcell::before{content:"交換決まり";display:inline-block;width:7.5em;color:var(--muted);font-weight:900}
   .toolbar select,.toolbar input{width:100%}
 }
+
+/* ===== Smartphone usability improvements only ===== */
+@media (max-width:720px){
+  body{
+    background:#fffdf8;
+    font-size:15px;
+  }
+  .wrap{
+    padding:10px 8px 96px;
+  }
+  .hero{
+    padding:14px 16px;
+    border-radius:18px;
+    margin-bottom:10px;
+  }
+  h1{
+    font-size:22px;
+  }
+  .hero p{
+    font-size:13px;
+    line-height:1.55;
+  }
+  .grid{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .panel{
+    border-radius:18px;
+    padding:12px;
+    box-shadow:none;
+  }
+  .panel h2{
+    font-size:17px;
+  }
+  .row2{
+    grid-template-columns:1fr;
+    gap:7px;
+  }
+  input,select,textarea{
+    min-height:44px;
+    font-size:16px; /* prevent iPhone zoom */
+    border-radius:13px;
+  }
+  textarea{
+    min-height:116px;
+  }
+  .btns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .btns button{
+    width:100%;
+    min-height:42px;
+  }
+  .toolbar{
+    position:sticky;
+    bottom:8px;
+    top:auto;
+    z-index:20;
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    gap:8px;
+    padding:9px;
+    border-radius:999px;
+    box-shadow:0 8px 28px rgba(31,41,51,.18);
+    -webkit-overflow-scrolling:touch;
+  }
+  .toolbar::-webkit-scrollbar{
+    display:none;
+  }
+  .toolbar button,
+  .toolbar select,
+  .toolbar input{
+    flex:0 0 auto;
+    width:auto;
+    min-width:max-content;
+    min-height:40px;
+    white-space:nowrap;
+    font-size:13px;
+  }
+  .toolbar .search{
+    min-width:220px;
+  }
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+  }
+  .card{
+    padding:10px 12px;
+    border-radius:15px;
+  }
+  .card span{
+    font-size:18px;
+  }
+  .sectionTitle{
+    margin:12px 0 8px;
+    padding:9px 13px;
+    border-radius:999px;
+    font-size:16px;
+  }
+  table{
+    border:0;
+    background:transparent;
+    border-radius:0;
+  }
+  tbody tr{
+    display:block;
+    background:#fff;
+    border:1.5px solid #ddd4c7;
+    border-radius:18px;
+    margin:0 0 10px;
+    padding:10px 12px;
+    overflow:hidden;
+  }
+  tbody tr:nth-child(even){
+    background:#fff;
+  }
+  tbody tr.done{
+    background:#eef7ee;
+  }
+  td{
+    display:grid;
+    grid-template-columns:7.6em 1fr;
+    align-items:center;
+    gap:8px;
+    border:0;
+    padding:7px 0;
+    font-size:15px;
+  }
+  td::before{
+    width:auto;
+  }
+  .checkcell{
+    display:grid;
+    grid-template-columns:7.6em 1fr;
+    text-align:left;
+    width:auto;
+  }
+  .checkcell input[type=checkbox]{
+    width:30px;
+    height:30px;
+  }
+  .badge{
+    min-width:64px;
+    padding:7px 12px;
+  }
+  .member{
+    font-size:18px;
+    white-space:normal;
+  }
+  .cellSelect,
+  .memberSel,
+  .modeSel,
+  .note{
+    width:100%;
+    min-width:0;
+  }
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .actions::before{
+    display:none;
+  }
+  .actions button{
+    width:100%;
+  }
+  .pill{
+    font-size:11px;
+    padding:4px 8px;
+  }
+  .warn{
+    font-size:12px;
+  }
+  .footer{
+    font-size:11px;
+  }
+}
+
+
+/* ===== Mobile select visibility fix ===== */
+@media (max-width:720px){
+  aside.panel.editOnly select,
+  aside.panel.editOnly input,
+  aside.panel.editOnly textarea{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+  aside.panel.editOnly #rankSelectWrap:not(.hidden),
+  aside.panel.editOnly #rankTextWrap:not(.hidden),
+  aside.panel.editOnly #typeSelectWrap:not(.hidden),
+  aside.panel.editOnly #typeTextWrap:not(.hidden),
+  aside.panel.editOnly #memberCustomInput:not(.hidden),
+  aside.panel.editOnly #goodsTypeCustomInput:not(.hidden){
+    display:block!important;
+  }
+  aside.panel.editOnly #memberInput,
+  aside.panel.editOnly #raritySelect,
+  aside.panel.editOnly #goodsTypeSelect,
+  aside.panel.editOnly #template,
+  aside.panel.editOnly #dictionarySelect{
+    min-height:48px!important;
+    font-size:16px!important;
+    background:#fff!important;
+    color:var(--ink)!important;
+  }
+}
+
+
+.previewOnly .sectionTitle{
+  display:inline-block!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:100%!important;
+  padding:8px 18px!important;
+  margin:10px 0 6px!important;
+  border-radius:999px!important;
+  color:#fff!important;
+  font-size:15px!important;
+  font-weight:900!important;
+  line-height:1.15!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+.previewOnly .sectionTitle span{
+  display:inline!important;
+  color:#fff!important;
+}
+.previewOnly .exportList{
+  width:100%;
+}
+.previewOnly .exportCard{
+  width:100%;
+  padding:9px 12px;
+}
+.previewOnly .exportTop{
+  margin-bottom:2px;
+  gap:7px;
+}
+.previewOnly .exportMember{
+  font-size:16px;
+  line-height:1.15;
+}
+.previewOnly .exportMeta{
+  font-size:11px;
+  line-height:1.45;
+}
+
+
+/* ===== PC editor readability improvement for image rows ===== */
+@media (min-width:721px){
+  #groupedTables table{
+    border:0;
+    background:transparent;
+    border-radius:0;
+  }
+  #groupedTables thead{
+    display:none;
+  }
+  #groupedTables tbody{
+    display:grid;
+    gap:10px;
+  }
+  #groupedTables tbody tr{
+    display:grid;
+    grid-template-columns:42px 96px 72px minmax(150px,1.1fr) minmax(150px,1fr) 150px 140px;
+    grid-template-areas:
+      "check image rank member status memo actions"
+      "check image mode type design memo actions";
+    gap:8px 12px;
+    align-items:center;
+    border:1.5px solid #ddd4c7;
+    border-radius:18px;
+    background:#fff;
+    padding:12px 14px;
+  }
+  #groupedTables tbody tr:nth-child(even){
+    background:#fffaf2;
+  }
+  #groupedTables tbody tr.done{
+    background:#eef7ee;
+  }
+  #groupedTables tbody td{
+    border:0;
+    padding:0;
+    font-size:14px;
+  }
+  #groupedTables tbody td::before{
+    display:block;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:900;
+    margin-bottom:3px;
+    line-height:1.1;
+  }
+  #groupedTables tbody td:nth-child(1){grid-area:check;}
+  #groupedTables tbody td:nth-child(2){grid-area:mode;}
+  #groupedTables tbody td:nth-child(3){grid-area:image;}
+  #groupedTables tbody td:nth-child(4){grid-area:rank;}
+  #groupedTables tbody td:nth-child(5){grid-area:type;}
+  #groupedTables tbody td:nth-child(6){grid-area:member;}
+  #groupedTables tbody td:nth-child(7){grid-area:design;}
+  #groupedTables tbody td:nth-child(8){grid-area:status;}
+  #groupedTables tbody td:nth-child(9){grid-area:memo;}
+  #groupedTables tbody td:nth-child(10){grid-area:actions;}
+
+  #groupedTables tbody td:nth-child(2)::before{content:"譲求";}
+  #groupedTables tbody td:nth-child(3)::before{content:"画像";}
+  #groupedTables tbody td:nth-child(4)::before{content:"レア";}
+  #groupedTables tbody td:nth-child(5)::before{content:"種類";}
+  #groupedTables tbody td:nth-child(6)::before{content:"メンバー";}
+  #groupedTables tbody td:nth-child(7)::before{content:"衣装/柄";}
+  #groupedTables tbody td:nth-child(8)::before{content:"状態";}
+  #groupedTables tbody td:nth-child(9)::before{content:"メモ";}
+
+  #groupedTables .checkcell{
+    width:auto;
+    text-align:center;
+    align-self:center;
+  }
+  #groupedTables .checkcell input[type=checkbox]{
+    width:28px;
+    height:28px;
+  }
+  #groupedTables .itemImgBox{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:6px;
+    align-items:start;
+  }
+  #groupedTables .itemImgThumb{
+    width:74px;
+    height:74px;
+    border-radius:14px;
+  }
+  #groupedTables .imageInput{
+    max-width:88px;
+    font-size:11px;
+    padding:6px;
+    border-radius:10px;
+  }
+  #groupedTables [data-imgdel]{
+    width:88px;
+    border-radius:12px;
+    padding:7px 8px;
+    font-size:12px;
+  }
+  #groupedTables .badge{
+    font-size:14px;
+    min-width:58px;
+    padding:7px 12px;
+  }
+  #groupedTables .member{
+    font-size:16px;
+    white-space:normal;
+  }
+  #groupedTables .cellSelect,
+  #groupedTables .note{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+  }
+  #groupedTables .modeSel{
+    min-width:0;
+  }
+  #groupedTables .actions{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  #groupedTables .actions button{
+    width:100%;
+    padding:9px 10px;
+  }
+}
+
+@media (min-width:721px) and (max-width:1080px){
+  #groupedTables tbody tr{
+    grid-template-columns:42px 92px 70px minmax(130px,1fr) minmax(130px,1fr);
+    grid-template-areas:
+      "check image rank member status"
+      "check image mode type design"
+      "check image memo memo actions";
+  }
+  #groupedTables .actions{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -158,7 +587,7 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
       <label>サブタイトル</label><input id="subInput" value="交換決まり済みをチェックして管理">
       <div class="row2">
         <div><label>テンプレート</label><select id="template">
-          <option value="lucky">ラキドロ</option><option value="mobagacha">モバガチャ</option><option value="photo">ランダム生写真</option><option value="card">トレカ・カード</option><option value="badge">缶バッジ・アクスタ</option><option value="custom">自由入力</option>
+          <option value="lucky">ラキドロ</option><option value="mobagacha" selected>モバガチャ</option><option value="photo">ランダム生写真</option><option value="card">トレカ・カード</option><option value="badge">缶バッジ・アクスタ</option><option value="custom">自由入力</option>
         </select></div>
         <div><label>テーマ色</label><select id="theme">
           <option value="#d71920">赤</option><option value="#4d85c5">青</option><option value="#f0b429">黄色</option><option value="#7c3aed">紫</option><option value="#2e9d49">ミント/緑</option><option value="#ec4899">ピンク</option><option value="#2b2f36">黒</option>
@@ -169,7 +598,29 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
       <div class="row2">
   <div id="rankTextWrap"><input id="rankInput" placeholder="賞/レア度 例:C賞, SR"></div>
   <div id="rankSelectWrap" class="hidden"><select id="raritySelect"><option>SR</option><option>R</option><option>N</option></select></div>
-  <input id="typeInput" placeholder="種類 例:チェキ">
+  <div id="typeTextWrap"><input id="typeInput" placeholder="種類 例:チェキ"></div>
+  <div id="typeSelectWrap" class="hidden">
+    <div class="small" style="margin:0 0 5px">レアリティに合わせて商品候補が切り替わります</div>
+    <select id="goodsTypeSelect">
+      <option>アクリルスタンド</option>
+      <option>アクリルキーホルダー</option>
+      <option>缶バッジ</option>
+      <option>生写真</option>
+      <option>ブロマイド</option>
+      <option>クリアカード</option>
+      <option>トレカ風カード</option>
+      <option>ステッカー</option>
+      <option>ポストカード</option>
+      <option>ミニ色紙</option>
+      <option>アクリルチャーム</option>
+      <option>ラバーキーホルダー</option>
+      <option>マグネット</option>
+      <option>コースター</option>
+      <option>待受画像</option>
+      <option value="__custom__">直接入力...</option>
+    </select>
+    <input id="goodsTypeCustomInput" class="hidden" placeholder="商品名を直接入力">
+  </div>
 </div>
       <div class="row2">
   <div>
@@ -180,12 +631,14 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
 </div>
       <div class="row2"><input id="qtyInput" type="number" min="1" value="1" placeholder="数量"><select id="modeInput"><option>譲</option><option>求</option><option>所持</option><option>自分用</option></select></div>
       <div class="row2"><select id="statusInput"><option>未交換</option><option>交渉中</option><option>交換決まり</option><option>交換完了</option><option>保留</option><option>自分用</option></select><input id="memoInput" placeholder="メモ"></div>
+      <label>スクショ画像 任意</label>
+      <input id="imageInput" type="file" accept="image/*">
       <div class="btns"><button class="good" id="addBtn">追加</button><button class="secondary" id="clearInputBtn">入力欄クリア</button></div>
 
       <label>CSV/テキスト一括追加</label>
       <textarea id="csvInput" placeholder="賞/レア度,種類,メンバー,衣装/柄,数量,譲求,状態,メモ&#10;C賞,オリジナルチェキ,北原もも,ダントツ衣装,2,譲,未交換,"></textarea>
       <div class="btns"><button id="importBtn">一括追加</button><button class="secondary" id="sampleBtn">サンプル投入</button></div>
-      <p class="small">数量が2以上なら自動で1点ずつ別行に分けます。譲/求・状態は表の中でも後から変更できます。</p>
+      <p class="small">数量が2以上なら自動で1点ずつ別行に分けます。モバガチャ時はSR/R/Nごとに商品候補が切り替わり、一覧にない商品は「直接入力...」で手打ちできます。スクショ画像も各アイテムに貼れます。</p>
 
       <label>メンバー辞書</label>
       <select id="dictionarySelect">
@@ -411,17 +864,24 @@ function memberOptionHtml(selected){
 
 function tableHeaderHtml(){
   return `<thead><tr>
-    <th class="editOnly">交換決まり</th><th>No.</th><th>譲求</th><th>賞/レア度</th><th>種類</th><th>メンバー</th><th>衣装/柄</th><th>状態</th><th>メモ</th><th class="editOnly">操作</th>
+    <th class="editOnly">交換決まり</th><th>譲求</th><th>画像</th><th>賞/レア度</th><th>種類</th><th>メンバー</th><th>衣装/柄</th><th>状態</th><th>メモ</th><th class="editOnly">操作</th>
   </tr></thead>`;
 }
 function rowHtml(it){
   const badgeClass=(it.rank||"").replace(/[^A-Za-zＡ-ＺA-Da-dSRN]/g,"").toUpperCase().slice(0,2)||"C";
   return `
     <td class="checkcell editOnly"><input type="checkbox" data-id="${it.id}" ${checked[it.id]?"checked":""}></td>
-    <td data-label="No." class="no">${String(it.no).padStart(2,"0")}</td>
     <td data-label="譲求">
       <select class="cellSelect modeSel editOnly" data-mode="${it.id}">${modeOptions.map(s=>`<option ${it.mode===s?"selected":""}>${s}</option>`).join("")}</select>
       <span class="previewMode hidden">${esc(it.mode||"譲")}</span>
+    </td>
+    <td data-label="画像">
+      <div class="itemImgBox editOnly">
+        ${it.image ? `<img class="itemImgThumb" src="${it.image}">` : `<span style="color:var(--muted);font-size:12px">なし</span>`}
+        <input class="imageInput" type="file" accept="image/*" data-image="${it.id}">
+        ${it.image ? `<button class="secondary" data-imgdel="${it.id}">画像削除</button>` : ``}
+      </div>
+      <span class="previewImg hidden">${it.image ? `<img class="itemImgThumb" src="${it.image}">` : ""}</span>
     </td>
     <td data-label="賞/レア度"><span class="badge ${badgeClass}">${esc(it.rank||"-")}</span></td>
     <td data-label="種類" class="strike">${esc(it.type||"-")}</td>
@@ -445,7 +905,7 @@ function buildGroupedTables(arr){
     {key:"譲", title:"譲り", cls:"offer", items:arr.filter(it=>it.mode==="譲")},
     {key:"求", title:"求む", cls:"want", items:arr.filter(it=>it.mode==="求")},
     {key:"other", title:"その他", cls:"other", items:arr.filter(it=>it.mode!=="譲" && it.mode!=="求")}
-  ].filter(g=>g.items.length || filterSelect.value==="all");
+  ].filter(g=>g.items.length);
 
   groupedTables.innerHTML = groups.map(g=>{
     const rows = g.items.map(it=>`<tr class="${checked[it.id]?"done":""}">${rowHtml(it)}</tr>`).join("");
@@ -456,7 +916,7 @@ function buildGroupedTables(arr){
       </div>
       <table>
         ${tableHeaderHtml()}
-        <tbody>${rows || `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:18px">該当なし</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:18px">該当なし</td></tr>`}</tbody>
       </table>
     `;
   }).join("");
@@ -467,25 +927,28 @@ function buildExportGrouped(arr){
     {title:"譲り", cls:"offer", items:arr.filter(it=>it.mode==="譲")},
     {title:"求む", cls:"want", items:arr.filter(it=>it.mode==="求")},
     {title:"その他", cls:"other", items:arr.filter(it=>it.mode!=="譲" && it.mode!=="求")}
-  ].filter(g=>g.items.length || filterSelect.value==="all");
+  ].filter(g=>g.items.length);
 
   exportGrouped.innerHTML = groups.map(g=>{
     const cards = g.items.map(it=>{
       const badgeClass=(it.rank||"").replace(/[^A-Za-zＡ-ＺA-Da-dSRN]/g,"").toUpperCase().slice(0,2)||"C";
       const checkMark = checked[it.id] ? "交換決まり済" : it.status || "未交換";
       const memo = it.memo ? `<div class="exportMeta">メモ：${esc(it.memo)}</div>` : "";
-      return `<div class="exportCard ${checked[it.id] ? "done" : ""}">
+      return `<div class="exportCard ${it.image ? "withImg" : ""} ${checked[it.id] ? "done" : ""}">
         <div class="exportTop">
-          <span class="exportNo">No.${String(it.no).padStart(2,"0")}</span>
-          <span class="badge ${badgeClass}">${esc(it.rank||"-")}</span>
-          <span class="exportMember">${esc(it.member||"-")}</span>
-          <span class="exportStatus">${esc(checkMark)}</span>
+          ${it.image ? `<img class="exportImg" src="${it.image}">` : ``}
+          <div class="exportTextBlock">
+            <div>
+              <span class="badge ${badgeClass}">${esc(it.rank||"-")}</span>
+              <span class="exportMember">${esc(it.member||"-")}</span>
+            </div>
+            <div class="exportMeta">種類：${esc(it.type||"-")}　/　衣装・柄：${esc(it.design||"-")}</div>
+            ${memo}
+          </div>
         </div>
-        <div class="exportMeta">種類：${esc(it.type||"-")}　/　衣装・柄：${esc(it.design||"-")}</div>
-        ${memo}
       </div>`;
     }).join("");
-    return `<div class="sectionTitle ${g.cls}"><span>${g.title}</span><span>${g.items.length}点</span></div>
+    return `<div class="sectionTitle ${g.cls}"><span>${g.title}</span></div>
       <div class="exportList">${cards || `<div class="exportCard" style="color:var(--muted);text-align:center">該当なし</div>`}</div>`;
   }).join("");
 }
@@ -495,6 +958,16 @@ function render(){
   buildGroupedTables(arr);
   buildExportGrouped(arr);
   document.querySelectorAll("input[type=checkbox][data-id]").forEach(cb=>cb.onchange=e=>{checked[e.target.dataset.id]=e.target.checked; save(); render()});
+  document.querySelectorAll("input[type=file][data-image]").forEach(inp=>inp.onchange=async e=>{
+    const it=items.find(x=>x.id===e.target.dataset.image);
+    if(!it || !e.target.files || !e.target.files[0]) return;
+    it.image = await fileToDataURL(e.target.files[0]);
+    save(); render();
+  });
+  document.querySelectorAll("[data-imgdel]").forEach(btn=>btn.onclick=e=>{
+    const it=items.find(x=>x.id===e.target.dataset.imgdel);
+    if(it){ it.image=""; save(); render(); }
+  });
   document.querySelectorAll("[data-mode]").forEach(sel=>sel.onchange=e=>{const it=items.find(x=>x.id===e.target.dataset.mode); if(it){it.mode=e.target.value; save(); render()}});
   document.querySelectorAll("[data-member]").forEach(sel=>sel.onchange=e=>{
     const it=items.find(x=>x.id===e.target.dataset.member);
@@ -515,13 +988,106 @@ function render(){
   sumTotal.textContent=total+"点"; sumOpen.textContent=(total-done)+"点"; sumDone.textContent=done+"点"; sumDupe.textContent=dupCount+"種";
 }
 function renumber(){items.forEach((it,i)=>it.no=i+1)}
+const mobagachaGoodsByRarity = {
+  "SR":[
+    "アクリルスタンド",
+    "ビッグアクリルスタンド",
+    "アクリルパネル",
+    "アクリルボード",
+    "ビジュアルタオル",
+    "直筆サイン入りアイテム"
+  ],
+  "R":[
+    "アクリルキーホルダー",
+    "アクリルチャーム",
+    "缶バッジ",
+    "クリアカード",
+    "トレカ風カード",
+    "ポストカード",
+    "ミニ色紙",
+    "コースター",
+    "マグネット",
+    "ラバーキーホルダー"
+  ],
+  "N":[
+    "缶バッジ",
+    "ステッカー",
+    "生写真",
+    "ブロマイド",
+    "待受画像",
+    "壁紙画像",
+    "クリアしおり"
+  ]
+};
+function updateGoodsOptionsByRarity(){
+  if(!goodsTypeSelect) return;
+  const rarity = raritySelect.value || "SR";
+  const current = goodsTypeSelect.value;
+  const list = mobagachaGoodsByRarity[rarity] || [];
+  goodsTypeSelect.innerHTML = "";
+  list.forEach(name=>{
+    const opt=document.createElement("option");
+    opt.value=name;
+    opt.textContent=name;
+    goodsTypeSelect.appendChild(opt);
+  });
+  const custom=document.createElement("option");
+  custom.value="__custom__";
+  custom.textContent="直接入力...";
+  goodsTypeSelect.appendChild(custom);
+  if(list.includes(current)){
+    goodsTypeSelect.value=current;
+  }else{
+    goodsTypeSelect.selectedIndex=0;
+  }
+  goodsTypeCustomInput.classList.toggle("hidden", goodsTypeSelect.value !== "__custom__");
+}
 function currentRankInputValue(){
   return template.value === "mobagacha" ? raritySelect.value : rankInput.value.trim();
+}
+function currentTypeInputValue(){
+  if(template.value !== "mobagacha") return typeInput.value.trim();
+  if(goodsTypeSelect.value === "__custom__") return goodsTypeCustomInput.value.trim();
+  return goodsTypeSelect.value;
+}
+function updateGoodsTypeMode(){
+  const isMobagacha = template.value === "mobagacha";
+  typeTextWrap.classList.toggle("hidden", isMobagacha);
+  typeSelectWrap.classList.toggle("hidden", !isMobagacha);
+  if(isMobagacha) updateGoodsOptionsByRarity();
+  goodsTypeCustomInput.classList.toggle("hidden", goodsTypeSelect.value !== "__custom__");
 }
 function updateRankInputMode(){
   const isMobagacha = template.value === "mobagacha";
   rankTextWrap.classList.toggle("hidden", isMobagacha);
   rankSelectWrap.classList.toggle("hidden", !isMobagacha);
+  if(isMobagacha && (!raritySelect.options || raritySelect.options.length === 0)){
+    raritySelect.innerHTML = "<option>SR</option><option>R</option><option>N</option>";
+  }
+}
+function refreshMobileSelects(){
+  updateDictionaryUI();
+  updateRankInputMode();
+  updateGoodsTypeMode();
+  if(memberInput && memberInput.options.length === 0){
+    currentMembers().forEach(m=>{
+      const opt=document.createElement("option");
+      opt.value=m; opt.textContent=m;
+      memberInput.appendChild(opt);
+    });
+    const customOpt=document.createElement("option");
+    customOpt.value="__custom__"; customOpt.textContent="直接入力...";
+    memberInput.appendChild(customOpt);
+  }
+}
+function fileToDataURL(file){
+  return new Promise((resolve,reject)=>{
+    if(!file){ resolve(""); return; }
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 function currentAddMemberName(){
   if(memberInput.value === "__custom__"){
@@ -529,9 +1095,10 @@ function currentAddMemberName(){
   }
   return normalizeName(memberInput.value.trim());
 }
-function addItemFromFields(){
+async function addItemFromFields(){
   const qty=Math.max(1,parseInt(qtyInput.value||"1",10));
-  const base={rank:currentRankInputValue(), type:typeInput.value.trim(), member:currentAddMemberName(), design:designInput.value.trim(), mode:modeInput.value, memo:memoInput.value.trim(), status:statusInput.value};
+  const imageData = await fileToDataURL(imageInput.files && imageInput.files[0]);
+  const base={rank:currentRankInputValue(), type:currentTypeInputValue(), member:currentAddMemberName(), design:designInput.value.trim(), mode:modeInput.value, memo:memoInput.value.trim(), status:statusInput.value, image:imageData};
   for(let i=0;i<qty;i++) items.push({...base,id:uid(),no:items.length+1});
   save(); render();
 }
@@ -572,8 +1139,8 @@ function copyText(){
 }
 function downloadBlob(content, filename, type){const blob=new Blob([content],{type}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename; a.click(); URL.revokeObjectURL(a.href)}
 function exportCSV(){
-  const header="No,譲求,賞/レア度,種類,メンバー,衣装/柄,状態,チェック済み,メモ\n";
-  const body=items.map(it=>[it.no,it.mode,it.rank,it.type,it.member,it.design,it.status,checked[it.id]?"済":"",it.memo].map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  const header="譲求,賞/レア度,種類,メンバー,衣装/柄,状態,チェック済み,画像,メモ\n";
+  const body=items.map(it=>[it.mode,it.rank,it.type,it.member,it.design,it.status,checked[it.id]?"済":"",it.image?"あり":"",it.memo].map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
   downloadBlob(header+body,"trade_check_list.csv","text/csv;charset=utf-8");
 }
 
@@ -581,12 +1148,19 @@ addBtn.onclick=addItemFromFields; importBtn.onclick=importCSV; sampleBtn.onclick
 clearInputBtn.onclick=()=>{
   ["rankInput","typeInput","designInput","memoInput"].forEach(id=>document.getElementById(id).value="");
   memberCustomInput.value="";
+  goodsTypeCustomInput.value="";
+  imageInput.value="";
   memberInput.selectedIndex=0;
+  goodsTypeSelect.selectedIndex=0;
+  updateGoodsOptionsByRarity();
   memberCustomInput.classList.add("hidden");
+  goodsTypeCustomInput.classList.add("hidden");
 };
-titleInput.oninput=applyHeader; subInput.oninput=applyHeader; theme.onchange=applyHeader; template.onchange=()=>{templateDefaults(); updateRankInputMode();};
+titleInput.oninput=applyHeader; subInput.oninput=applyHeader; theme.onchange=applyHeader; template.onchange=()=>{templateDefaults(); refreshMobileSelects();};
 memberInput.onchange=()=>{memberCustomInput.classList.toggle("hidden", memberInput.value !== "__custom__");};
-dictionarySelect.onchange=e=>{currentDict=e.target.value; save(); updateDictionaryUI(); render()};
+goodsTypeSelect.onchange=()=>{goodsTypeCustomInput.classList.toggle("hidden", goodsTypeSelect.value !== "__custom__");};
+raritySelect.onchange=()=>{updateGoodsOptionsByRarity();};
+dictionarySelect.onchange=e=>{currentDict=e.target.value; save(); refreshMobileSelects(); render()};
 fixNamesBtn.onclick=()=>{items.forEach(it=>it.member=normalizeName(it.member)); save(); render()};
 sortPreset.onchange=()=>{applySortPreset(); render();};
 sort1.onchange=()=>{sortPreset.value="custom"; render();};
@@ -600,28 +1174,19 @@ loadJsonBtn.onclick=()=>fileInput.click();
 fileInput.onchange=async e=>{const f=e.target.files[0]; if(!f)return; try{const data=JSON.parse(await f.text()); items=data.items||[]; checked=data.checked||{}; titleInput.value=data.title||"グッズ交換チェックリスト"; subInput.value=data.subtitle||"交換決まり済みをチェックして管理"; theme.value=data.theme||"#d71920"; currentDict=data.dictionary||"all"; dictionarySelect.value=currentDict; renumber(); save(); render()}catch(err){alert("読み込みに失敗しました")}};
 savePngBtn.onclick=async()=>{
   document.body.classList.add("previewOnly");
-  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember").forEach(x=>x.classList.remove("hidden"));
+  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember,.previewImg").forEach(x=>x.classList.remove("hidden"));
   await new Promise(r=>setTimeout(r,80));
-  const canvas=await html2canvas(captureContent,{scale:2,backgroundColor:"#fffdf8", windowWidth:1100});
+  const canvas=await html2canvas(captureContent,{scale:2,backgroundColor:"#fffdf8", windowWidth:700});
   document.body.classList.remove("previewOnly");
-  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember").forEach(x=>x.classList.add("hidden"));
+  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember,.previewImg").forEach(x=>x.classList.add("hidden"));
   const a=document.createElement("a"); a.href=canvas.toDataURL("image/png"); a.download="trade_check_list.png"; a.click();
 };
 
 loadSettings();
 if(items.length===0){
-  items=[
-    {id:uid(),no:1,mode:"譲",rank:"B賞",type:"A4クリアポスター",member:"西﨑美空",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
-    {id:uid(),no:2,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"北原もも",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
-    {id:uid(),no:3,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"北原もも",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
-    {id:uid(),no:4,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"米村姫良々",design:"『また、あなたに恋焦がれているんだ』衣装",status:"未交換",memo:""},
-    {id:uid(),no:5,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"筒井澪心",design:"『また、あなたに恋焦がれているんだ』衣装",status:"未交換",memo:""},
-    {id:uid(),no:6,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"中山夏月姫",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
-    {id:uid(),no:7,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"広本瑠璃",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
-    {id:uid(),no:8,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"窪田七海",design:"『ダントツで愛して』衣装",status:"未交換",memo:""}
-  ];
+  items=[];
 }
-templateDefaults(); updateRankInputMode(); applySortPreset(); render();
+templateDefaults(); refreshMobileSelects(); applySortPreset(); render();
 </script>
 </body>
 </html>
