@@ -638,7 +638,7 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
       <label>CSV/テキスト一括追加</label>
       <textarea id="csvInput" placeholder="賞/レア度,種類,メンバー,衣装/柄,数量,譲求,状態,メモ&#10;C賞,オリジナルチェキ,北原もも,ダントツ衣装,2,譲,未交換,"></textarea>
       <div class="btns"><button id="importBtn">一括追加</button><button class="secondary" id="sampleBtn">サンプル投入</button></div>
-      <p class="small">数量が2以上なら自動で1点ずつ別行に分けます。モバガチャ時はSR/R/Nごとに商品候補が切り替わり、一覧にない商品は「直接入力...」で手打ちできます。スクショ画像も各アイテムに貼れます。</p>
+      <p class="small">数量が2以上なら自動で1点ずつ別行に分けます。モバガチャ時はSR/R/Nごとに商品候補が切り替わり、一覧にない商品は「直接入力...」で手打ちできます。スクショ画像も各アイテムに貼れます。iPhoneでは「iPhoneで保存/共有」から共有シートを開けます。</p>
 
       <label>メンバー辞書</label>
       <select id="dictionarySelect">
@@ -663,7 +663,7 @@ input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
 
     <main class="panel" id="captureArea">
       <div class="toolbar editOnly">
-        <button class="main" id="savePngBtn">PNG画像保存</button><button class="secondary" id="copyTextBtn">交換用テキストコピー</button><button class="danger" id="resetCheckBtn">チェック全解除</button>
+        <button class="main" id="savePngBtn">PNG画像保存</button><button class="secondary" id="sharePngBtn">iPhoneで保存/共有</button><button class="secondary" id="copyTextBtn">交換用テキストコピー</button><button class="danger" id="resetCheckBtn">チェック全解除</button>
         <select id="sortPreset">
           <option value="rank_member">レアリティ ＞ メンバー序列</option>
           <option value="member_rank">メンバー序列 ＞ レアリティ</option>
@@ -1172,14 +1172,52 @@ copyTextBtn.onclick=copyText; exportCsvBtn.onclick=exportCSV;
 saveJsonBtn.onclick=()=>downloadBlob(JSON.stringify({title:titleInput.value,subtitle:subInput.value,theme:theme.value,dictionary:currentDict,items,checked},null,2),"trade_check_data.json","application/json");
 loadJsonBtn.onclick=()=>fileInput.click();
 fileInput.onchange=async e=>{const f=e.target.files[0]; if(!f)return; try{const data=JSON.parse(await f.text()); items=data.items||[]; checked=data.checked||{}; titleInput.value=data.title||"グッズ交換チェックリスト"; subInput.value=data.subtitle||"交換決まり済みをチェックして管理"; theme.value=data.theme||"#d71920"; currentDict=data.dictionary||"all"; dictionarySelect.value=currentDict; renumber(); save(); render()}catch(err){alert("読み込みに失敗しました")}};
-savePngBtn.onclick=async()=>{
+async function makeExportCanvas(){
   document.body.classList.add("previewOnly");
   document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember,.previewImg").forEach(x=>x.classList.remove("hidden"));
-  await new Promise(r=>setTimeout(r,80));
+  await new Promise(r=>setTimeout(r,120));
   const canvas=await html2canvas(captureContent,{scale:2,backgroundColor:"#fffdf8", windowWidth:700});
   document.body.classList.remove("previewOnly");
   document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember,.previewImg").forEach(x=>x.classList.add("hidden"));
-  const a=document.createElement("a"); a.href=canvas.toDataURL("image/png"); a.download="trade_check_list.png"; a.click();
+  return canvas;
+}
+function canvasToBlob(canvas){
+  return new Promise(resolve=>canvas.toBlob(resolve, "image/png"));
+}
+savePngBtn.onclick=async()=>{
+  const canvas = await makeExportCanvas();
+  const a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download="trade_check_list.png";
+  a.click();
+};
+sharePngBtn.onclick=async()=>{
+  try{
+    const canvas = await makeExportCanvas();
+    const blob = await canvasToBlob(canvas);
+    const file = new File([blob], "trade_check_list.png", {type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]}) && navigator.share){
+      await navigator.share({
+        files:[file],
+        title:titleInput.value || "グッズ交換チェックリスト",
+        text:subInput.value || ""
+      });
+    }else{
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, "_blank");
+      if(!win){
+        const a=document.createElement("a");
+        a.href=url;
+        a.download="trade_check_list.png";
+        a.click();
+      }
+      setTimeout(()=>URL.revokeObjectURL(url), 60000);
+      alert("共有機能が使えない環境です。開いた画像を長押しして「写真に保存」を選んでください。");
+    }
+  }catch(err){
+    alert("保存/共有に失敗しました。通常のPNG画像保存を試してください。");
+    console.error(err);
+  }
 };
 
 loadSettings();
