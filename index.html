@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>グッズ交換チェックメーカー 汎用版 v2</title>
+<style>
+:root{
+  --bg:#fffdf8; --panel:#ffffff; --soft:#fff4df; --line:#ded7ca; --ink:#1f2933; --muted:#607080;
+  --main:#d71920; --dark:#2b2f36; --blue:#4d85c5; --orange:#c56635; --green:#2e9d49; --purple:#7873a8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,#fffdf8,#fff9ef);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans JP","Hiragino Kaku Gothic ProN",Meiryo,sans-serif}
+.wrap{max-width:1320px;margin:0 auto;padding:18px 14px 44px}
+.hero{background:var(--soft);border:2px solid #f0d7a5;border-radius:24px;padding:20px 24px;margin-bottom:14px}
+h1{margin:0 0 8px;color:var(--main);font-size:clamp(24px,3.3vw,40px);line-height:1.25}
+.hero p{margin:0;color:var(--muted);font-weight:800;line-height:1.7}
+.grid{display:grid;grid-template-columns:380px 1fr;gap:14px;align-items:start}
+.panel{background:var(--panel);border:1.5px solid #e5ddcf;border-radius:22px;padding:16px;box-shadow:0 6px 24px rgba(68,53,28,.06)}
+.panel h2{font-size:18px;margin:0 0 12px}
+label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin:10px 0 5px}
+input,select,textarea{width:100%;border:1.5px solid #d7dde6;border-radius:14px;padding:10px 12px;font-size:14px;background:#fff;color:var(--ink)}
+textarea{min-height:106px;resize:vertical;line-height:1.55}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{border:0;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;background:var(--dark);color:#fff;font-size:13px}
+button.secondary{background:#fff;color:var(--dark);border:1.5px solid #cfd7e3}
+button.danger{background:#b42318}
+button.good{background:var(--green)}
+button.main{background:var(--main)}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.small{font-size:12px;color:var(--muted);line-height:1.65}
+.badge{display:inline-block;color:#fff;border-radius:999px;padding:6px 10px;font-weight:900;min-width:54px;text-align:center}
+.badge.A,.badge.SR,.badge.S{background:var(--blue)}
+.badge.B,.badge.R{background:var(--orange)}
+.badge.C,.badge.N{background:var(--green)}
+.badge.D{background:var(--purple)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;background:#f4f7fb;border:1px solid #d7dde6;border-radius:18px;padding:10px}
+.toolbar select,.toolbar input{width:auto;min-width:138px}
+.toolbar .search{flex:1;min-width:180px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.card{border:1.5px solid #e2d8c7;border-radius:18px;padding:12px 14px;background:#fff}
+.card b{display:block;color:var(--muted);font-size:12px;margin-bottom:4px}
+.card span{font-size:20px;font-weight:900}
+table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border:2px solid #cfc7bb;border-radius:18px;background:#fff}
+th{background:var(--dark);color:#fff;text-align:left;padding:11px 9px;font-size:13px;white-space:nowrap}
+td{border-top:1.5px solid var(--line);padding:9px 8px;vertical-align:middle;font-size:14px}
+tr:nth-child(even){background:#fffaf2}
+tr.done{opacity:.62;background:#eef7ee}
+tr.done .strike{text-decoration:line-through}
+.checkcell{text-align:center;width:54px}
+input[type=checkbox]{width:24px;height:24px;accent-color:var(--green)}
+.member{font-weight:900;font-size:16px;white-space:nowrap}
+.cellSelect{border-radius:999px;font-weight:900;padding:7px 9px;min-width:104px}
+.modeSel{min-width:76px}
+.memberSel{min-width:130px;font-weight:900}
+.note{min-width:126px}
+.actions{white-space:nowrap}
+.no{font-weight:900;color:var(--muted)}
+.hidden{display:none!important}
+.previewOnly .editOnly{display:none!important}
+.exportOnly{display:none}
+.previewOnly .exportOnly{display:block}
+.previewOnly .screenOnly{display:none!important}
+.previewOnly .footer{display:none!important}
+.previewOnly .cards{display:none!important}
+.exportTitle{
+  background:var(--soft);
+  border:2px solid #f0d7a5;
+  border-radius:24px;
+  padding:18px 22px;
+  margin-bottom:14px;
+}
+.exportTitle h1{
+  margin:0 0 8px;
+  color:var(--main);
+  font-size:34px;
+  line-height:1.25;
+}
+.exportTitle p{
+  margin:0;
+  color:var(--muted);
+  font-weight:900;
+  font-size:18px;
+  line-height:1.55;
+}
+.exportList{display:grid;gap:10px}
+.exportCard{
+  border:1.5px solid #ddd4c7;
+  border-radius:18px;
+  background:#fff;
+  padding:12px 14px;
+}
+.exportTop{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:8px;
+}
+.exportNo{font-weight:900;color:var(--muted);min-width:42px}
+.exportMember{font-size:20px;font-weight:900}
+.exportMeta{font-size:14px;line-height:1.6;color:var(--ink)}
+.exportStatus{
+  margin-left:auto;
+  font-weight:900;
+  color:var(--muted);
+}
+.previewOnly #captureArea{
+  width:1000px;
+  max-width:1000px;
+}
+.previewOnly .cards{
+  grid-template-columns:repeat(4,1fr)!important;
+}
+.previewOnly #captureContent{
+  width:1000px;
+  padding:4px;
+}
+.previewMode,.previewStatus,.previewMemo{font-weight:900}
+.sectionTitle{
+  margin:16px 0 8px;
+  padding:10px 14px;
+  border-radius:16px;
+  font-weight:900;
+  color:#fff;
+  background:var(--dark);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.sectionTitle.offer{background:#c56635}
+.sectionTitle.want{background:#4d85c5}
+.sectionTitle.other{background:#7873a8}
+.footer{margin-top:12px;color:var(--muted);font-size:12px;line-height:1.7}
+.pill{display:inline-block;background:#f1f5f9;border:1px solid #d7dde6;border-radius:999px;padding:5px 9px;margin:3px 3px 0 0;font-size:12px;font-weight:800}
+.warn{background:#fff3cd;border:1px solid #f0d37a;border-radius:14px;padding:10px 12px;color:#6b4d00;font-size:13px;line-height:1.6;margin-top:8px}
+@media(max-width:940px){.grid{grid-template-columns:1fr}.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){
+  .cards{grid-template-columns:1fr} table,thead,tbody,tr,th,td{display:block} thead{display:none}
+  tr{border-top:2px solid var(--line);padding:10px} td{border:0;padding:6px 4px}
+  td::before{content:attr(data-label);display:inline-block;width:7.5em;color:var(--muted);font-weight:900}
+  .checkcell{text-align:left;width:auto}.checkcell::before{content:"交換決まり";display:inline-block;width:7.5em;color:var(--muted);font-weight:900}
+  .toolbar select,.toolbar input{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1 id="viewTitle">グッズ交換チェックメーカー</h1>
+    <p id="viewSub">ラキドロ / モバガチャ / ランダム生写真 / トレカ / 缶バッジなどに使える汎用版</p>
+  </section>
+
+  <div class="grid">
+    <aside class="panel editOnly">
+      <h2>作成・編集</h2>
+      <label>タイトル</label><input id="titleInput" value="グッズ交換チェックリスト">
+      <label>サブタイトル</label><input id="subInput" value="交換決まり済みをチェックして管理">
+      <div class="row2">
+        <div><label>テンプレート</label><select id="template">
+          <option value="lucky">ラキドロ</option><option value="mobagacha">モバガチャ</option><option value="photo">ランダム生写真</option><option value="card">トレカ・カード</option><option value="badge">缶バッジ・アクスタ</option><option value="custom">自由入力</option>
+        </select></div>
+        <div><label>テーマ色</label><select id="theme">
+          <option value="#d71920">赤</option><option value="#4d85c5">青</option><option value="#f0b429">黄色</option><option value="#7c3aed">紫</option><option value="#2e9d49">ミント/緑</option><option value="#ec4899">ピンク</option><option value="#2b2f36">黒</option>
+        </select></div>
+      </div>
+
+      <label>1件追加</label>
+      <div class="row2">
+  <div id="rankTextWrap"><input id="rankInput" placeholder="賞/レア度 例:C賞, SR"></div>
+  <div id="rankSelectWrap" class="hidden"><select id="raritySelect"><option>SR</option><option>R</option><option>N</option></select></div>
+  <input id="typeInput" placeholder="種類 例:チェキ">
+</div>
+      <div class="row2">
+  <div>
+    <select id="memberInput"></select>
+    <input id="memberCustomInput" class="hidden" placeholder="メンバー名を直接入力">
+  </div>
+  <input id="designInput" placeholder="衣装/柄/デザイン">
+</div>
+      <div class="row2"><input id="qtyInput" type="number" min="1" value="1" placeholder="数量"><select id="modeInput"><option>譲</option><option>求</option><option>所持</option><option>自分用</option></select></div>
+      <div class="row2"><select id="statusInput"><option>未交換</option><option>交渉中</option><option>交換決まり</option><option>交換完了</option><option>保留</option><option>自分用</option></select><input id="memoInput" placeholder="メモ"></div>
+      <div class="btns"><button class="good" id="addBtn">追加</button><button class="secondary" id="clearInputBtn">入力欄クリア</button></div>
+
+      <label>CSV/テキスト一括追加</label>
+      <textarea id="csvInput" placeholder="賞/レア度,種類,メンバー,衣装/柄,数量,譲求,状態,メモ&#10;C賞,オリジナルチェキ,北原もも,ダントツ衣装,2,譲,未交換,"></textarea>
+      <div class="btns"><button id="importBtn">一括追加</button><button class="secondary" id="sampleBtn">サンプル投入</button></div>
+      <p class="small">数量が2以上なら自動で1点ずつ別行に分けます。譲/求・状態は表の中でも後から変更できます。</p>
+
+      <label>メンバー辞書</label>
+      <select id="dictionarySelect">
+        <option value="all">ハロプロ全体</option>
+        <option value="morning">モーニング娘。'26</option>
+        <option value="angerme">アンジュルム</option>
+        <option value="juice">Juice=Juice</option>
+        <option value="tsubaki">つばきファクトリー</option>
+        <option value="beyond">BEYOOOOONDS</option>
+        <option value="ocha">OCHA NORMA</option>
+        <option value="rosy">ロージークロニクル</option>
+      </select>
+      <div id="dictPills"></div>
+      <div class="warn" id="warnBox">表記ゆれがある場合はここに表示されます。</div>
+      <div class="btns"><button class="secondary" id="fixNamesBtn">表記ゆれ自動修正</button></div>
+
+      <label>保存・読込</label>
+      <div class="btns">
+        <button id="saveJsonBtn" class="secondary">JSON保存</button><button id="loadJsonBtn" class="secondary">JSON読込</button><button id="exportCsvBtn" class="secondary">CSV保存</button><input id="fileInput" type="file" accept=".json,application/json" hidden>
+      </div>
+    </aside>
+
+    <main class="panel" id="captureArea">
+      <div class="toolbar editOnly">
+        <button class="main" id="savePngBtn">PNG画像保存</button><button class="secondary" id="copyTextBtn">交換用テキストコピー</button><button class="danger" id="resetCheckBtn">チェック全解除</button>
+        <select id="sortPreset">
+          <option value="rank_member">レアリティ ＞ メンバー序列</option>
+          <option value="member_rank">メンバー序列 ＞ レアリティ</option>
+          <option value="unchecked_rank_member">未チェック ＞ レアリティ ＞ メンバー</option>
+          <option value="mode_rank_member">譲求 ＞ レアリティ ＞ メンバー</option>
+          <option value="status_rank_member">状態 ＞ レアリティ ＞ メンバー</option>
+          <option value="type_rank_member">種類 ＞ レアリティ ＞ メンバー</option>
+          <option value="custom">カスタム</option>
+        </select>
+        <select id="sort1"><option value="rank">1:レアリティ</option><option value="member">1:メンバー序列</option><option value="type">1:種類</option><option value="mode">1:譲求</option><option value="status">1:状態</option><option value="checked">1:未チェック</option><option value="no">1:登録順</option></select>
+        <select id="sort2"><option value="member">2:メンバー序列</option><option value="rank">2:レアリティ</option><option value="type">2:種類</option><option value="mode">2:譲求</option><option value="status">2:状態</option><option value="checked">2:未チェック</option><option value="no">2:登録順</option></select>
+        <select id="sort3"><option value="no">3:登録順</option><option value="member">3:メンバー序列</option><option value="rank">3:レアリティ</option><option value="type">3:種類</option><option value="mode">3:譲求</option><option value="status">3:状態</option><option value="checked">3:未チェック</option></select>
+        <select id="filterSelect"><option value="all">全表示</option><option value="unchecked">未チェックのみ</option><option value="checked">チェック済みのみ</option><option value="offer">譲のみ</option><option value="want">求のみ</option><option value="dupe">被りのみ</option><option value="negotiating">交渉中のみ</option><option value="decided">交換決まりのみ</option></select>
+        <input id="searchInput" class="search" placeholder="検索：メンバー/種類/衣装/メモ">
+      </div>
+
+      <section id="captureContent">
+        <section class="exportTitle exportOnly">
+          <h1 id="exportTitleText"></h1>
+          <p id="exportSubText"></p>
+        </section>
+        <section class="cards">
+          <div class="card" style="background:#fff0cf"><b>合計</b><span id="sumTotal">0点</span></div>
+          <div class="card" style="background:#edf7ff"><b>未チェック</b><span id="sumOpen">0点</span></div>
+          <div class="card" style="background:#eef7ee"><b>チェック済み</b><span id="sumDone">0点</span></div>
+          <div class="card" style="background:#f4f1ff"><b>被り</b><span id="sumDupe">0種</span></div>
+        </section>
+        <div id="groupedTables" class="screenOnly"></div>
+        <div id="exportGrouped" class="exportOnly"></div>
+        <div class="footer">※「譲り」は上の欄、「求む」は下の欄に分けて表示します。表の「譲求」「状態」は後から変更できます。PNG保存時は入力欄なしの見やすい表示になります。<br>※メンバー辞書で表記ゆれをチェックできます。例：西崎 → 西﨑美空。</div>
+      </section>
+    </main>
+  </div>
+</div>
+<datalist id="memberList"></datalist>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script>
+const baseDictionaries = {
+  morning:["野中美希","小田さくら","岡村ほまれ","山﨑愛生","櫻井梨央","井上春華","弓桁朱琴","杉原明紗","安田美結","鈴木もあ","石川華望"],
+  angerme:["伊勢鈴蘭","為永幸音","橋迫鈴","川名凜","松本わかな","平山遊季","下井谷幸穂","後藤花","長野桃羽"],
+  juice:["段原瑠々","井上玲音","工藤由愛","松永里愛","有澤一華","入江里咲","江端妃咲","石山咲良","遠藤彩加里","川嶋美楓","林仁愛"],
+  tsubaki:["谷本安美","小野瑞歩","小野田紗栞","秋山眞緒","河西結心","福田真琳","豫風瑠乃","石井泉羽","村田結生","土居楓奏","西村乙輝"],
+  beyond:["西田汐里","江口紗耶","前田こころ","岡村美波","清野桃々姫","平井美葉","小林萌花","里吉うたの","小島はな","大坪茉乃","杉山結菜"],
+  ocha:["斉藤円香","広本瑠璃","米村姫良々","窪田七海","中山夏月姫","西﨑美空","北原もも","筒井澪心"],
+  rosy:["橋田歩果","吉田姫杷","小野田華凜","村越彩菜","植村葉純","松原ユリヤ","島川波菜","上村麗菜","相馬優芽"]
+};
+const dictionaries = {...baseDictionaries, all:Object.values(baseDictionaries).flat()};
+const aliases = {
+  "西崎美空":"西﨑美空","西崎":"西﨑美空","西﨑":"西﨑美空",
+  "山崎愛生":"山﨑愛生","山崎":"山﨑愛生","山﨑":"山﨑愛生",
+  "川名凛":"川名凜","上国料萌衣":"上國料萌衣","斎藤円香":"斉藤円香",
+  "小野田華凛":"小野田華凜","小野田かりん":"小野田華凜",
+  "秋山真緒":"秋山眞緒","広本瑠璃ちゃん":"広本瑠璃",
+  "りさち":"入江里咲","えば":"江端妃咲","るり":"広本瑠璃","ろこ":"筒井澪心"
+};
+const modeOptions = ["譲","求","所持","自分用"];
+const stateOptions = ["未交換","交渉中","交換決まり","交換完了","保留","自分用"];
+let items = JSON.parse(localStorage.getItem("tradeMakerItems_v2") || "[]");
+let checked = JSON.parse(localStorage.getItem("tradeMakerChecked_v2") || "{}");
+let currentDict = localStorage.getItem("tradeMakerDict_v2") || "all";
+
+function uid(){return "id_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,8)}
+function save(){
+  localStorage.setItem("tradeMakerItems_v2", JSON.stringify(items));
+  localStorage.setItem("tradeMakerChecked_v2", JSON.stringify(checked));
+  localStorage.setItem("tradeMakerTitle_v2", titleInput.value);
+  localStorage.setItem("tradeMakerSub_v2", subInput.value);
+  localStorage.setItem("tradeMakerTheme_v2", theme.value);
+  localStorage.setItem("tradeMakerDict_v2", currentDict);
+}
+function loadSettings(){
+  titleInput.value=localStorage.getItem("tradeMakerTitle_v2")||"グッズ交換チェックリスト";
+  subInput.value=localStorage.getItem("tradeMakerSub_v2")||"交換決まり済みをチェックして管理";
+  theme.value=localStorage.getItem("tradeMakerTheme_v2")||"#d71920";
+  dictionarySelect.value=currentDict;
+}
+function applyHeader(){
+  viewTitle.textContent=titleInput.value||"グッズ交換チェックリスト";
+  viewSub.textContent=subInput.value||"交換決まり済みをチェックして管理";
+  if(document.getElementById("exportTitleText")) exportTitleText.textContent = titleInput.value || "グッズ交換チェックリスト";
+  if(document.getElementById("exportSubText")) exportSubText.textContent = subInput.value || "交換決まり済みをチェックして管理";
+  document.documentElement.style.setProperty("--main", theme.value);
+  save();
+}
+function normalizeName(name){const n=(name||"").trim(); return aliases[n]||n}
+function currentMembers(){return dictionaries[currentDict]||[]}
+function updateDictionaryUI(){
+  memberList.innerHTML="";
+  const current = memberInput.value;
+  memberInput.innerHTML = "";
+  currentMembers().forEach(m=>{
+    const opt=document.createElement("option");
+    opt.value=m;
+    opt.textContent=m;
+    memberList.appendChild(opt.cloneNode(true));
+    memberInput.appendChild(opt);
+  });
+  const customOpt=document.createElement("option");
+  customOpt.value="__custom__";
+  customOpt.textContent="直接入力...";
+  memberInput.appendChild(customOpt);
+  if(current && [...memberInput.options].some(o=>o.value===current)){
+    memberInput.value=current;
+  }
+  dictPills.innerHTML=currentMembers().map(m=>`<span class="pill">${m}</span>`).join("");
+  checkWarnings();
+}
+function checkWarnings(){
+  const warnings=[];
+  items.forEach(it=>{
+    const fixed=normalizeName(it.member);
+    if(fixed!==it.member) warnings.push(`${it.member} → ${fixed}`);
+    if(it.member.includes("崎") && it.member.includes("西")) warnings.push(`${it.member} → 西﨑美空`);
+  });
+  warnBox.textContent = warnings.length ? "表記ゆれ候補：" + [...new Set(warnings)].join(" / ") : "表記ゆれは見つかっていません。";
+}
+function rankWeight(v){
+  const s=(v||"").toUpperCase();
+  if(s.includes("SS")||s.includes("S賞")) return 0;
+  if(s.includes("SR")||s==="S") return 1;
+  if(s.includes("A")) return 2;
+  if(s.includes("B")) return 3;
+  if(s.includes("C")) return 4;
+  if(s.includes("D")) return 5;
+  if(s==="R"||s.includes("R賞")) return 6;
+  if(s.includes("N")) return 7;
+  return 50;
+}
+function duplicateKeys(){
+  const map={}; items.forEach(it=>{const k=[it.mode,it.rank,it.type,it.member,it.design].join("||"); map[k]=(map[k]||0)+1}); return map;
+}
+function memberWeight(name){
+  const members = currentMembers();
+  const i = members.indexOf(name);
+  return i >= 0 ? i : 9999;
+}
+function compareByCriterion(a,b,key){
+  if(key==="rank") return rankWeight(a.rank)-rankWeight(b.rank) || String(a.rank||"").localeCompare(String(b.rank||""),"ja");
+  if(key==="member") return memberWeight(a.member)-memberWeight(b.member) || String(a.member||"").localeCompare(String(b.member||""),"ja");
+  if(key==="type") return String(a.type||"").localeCompare(String(b.type||""),"ja");
+  if(key==="mode") return modeOptions.indexOf(a.mode)-modeOptions.indexOf(b.mode) || String(a.mode||"").localeCompare(String(b.mode||""),"ja");
+  if(key==="status") return stateOptions.indexOf(a.status)-stateOptions.indexOf(b.status) || String(a.status||"").localeCompare(String(b.status||""),"ja");
+  if(key==="checked") return (checked[a.id]?1:0)-(checked[b.id]?1:0);
+  if(key==="no") return a.no-b.no;
+  return 0;
+}
+function activeSortKeys(){
+  return [sort1.value, sort2.value, sort3.value, "no"].filter((v,i,a)=>v && a.indexOf(v)===i);
+}
+function applySortPreset(){
+  const presets = {
+    rank_member:["rank","member","no"],
+    member_rank:["member","rank","no"],
+    unchecked_rank_member:["checked","rank","member"],
+    mode_rank_member:["mode","rank","member"],
+    status_rank_member:["status","rank","member"],
+    type_rank_member:["type","rank","member"]
+  };
+  if(sortPreset.value === "custom") return;
+  const keys = presets[sortPreset.value] || presets.rank_member;
+  sort1.value = keys[0];
+  sort2.value = keys[1];
+  sort3.value = keys[2];
+}
+function filteredSorted(){
+  const filter=filterSelect.value, q=searchInput.value.trim().toLowerCase(), dup=duplicateKeys();
+  let arr=[...items].filter(it=>{
+    const done=!!checked[it.id], key=[it.mode,it.rank,it.type,it.member,it.design].join("||");
+    if(filter==="unchecked"&&done) return false; if(filter==="checked"&&!done) return false;
+    if(filter==="offer"&&it.mode!=="譲") return false; if(filter==="want"&&it.mode!=="求") return false;
+    if(filter==="dupe"&&dup[key]<2) return false; if(filter==="negotiating"&&it.status!=="交渉中") return false;
+    if(filter==="decided"&&it.status!=="交換決まり") return false;
+    if(q && ![it.rank,it.type,it.member,it.design,it.memo,it.mode,it.status].join(" ").toLowerCase().includes(q)) return false;
+    return true;
+  });
+  const keys = activeSortKeys();
+  arr.sort((a,b)=>{
+    for(const key of keys){
+      const c = compareByCriterion(a,b,key);
+      if(c !== 0) return c;
+    }
+    return a.no-b.no;
+  });
+  return arr;
+}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function memberOptionHtml(selected){
+  const members = currentMembers();
+  const safeSelected = selected || "";
+  let opts = "";
+  if(safeSelected && !members.includes(safeSelected)){
+    opts += `<option selected>${esc(safeSelected)}</option>`;
+  }
+  opts += members.map(m=>`<option ${safeSelected===m?"selected":""}>${esc(m)}</option>`).join("");
+  opts += `<option value="__custom__">直接入力...</option>`;
+  return opts;
+}
+
+function tableHeaderHtml(){
+  return `<thead><tr>
+    <th class="editOnly">交換決まり</th><th>No.</th><th>譲求</th><th>賞/レア度</th><th>種類</th><th>メンバー</th><th>衣装/柄</th><th>状態</th><th>メモ</th><th class="editOnly">操作</th>
+  </tr></thead>`;
+}
+function rowHtml(it){
+  const badgeClass=(it.rank||"").replace(/[^A-Za-zＡ-ＺA-Da-dSRN]/g,"").toUpperCase().slice(0,2)||"C";
+  return `
+    <td class="checkcell editOnly"><input type="checkbox" data-id="${it.id}" ${checked[it.id]?"checked":""}></td>
+    <td data-label="No." class="no">${String(it.no).padStart(2,"0")}</td>
+    <td data-label="譲求">
+      <select class="cellSelect modeSel editOnly" data-mode="${it.id}">${modeOptions.map(s=>`<option ${it.mode===s?"selected":""}>${s}</option>`).join("")}</select>
+      <span class="previewMode hidden">${esc(it.mode||"譲")}</span>
+    </td>
+    <td data-label="賞/レア度"><span class="badge ${badgeClass}">${esc(it.rank||"-")}</span></td>
+    <td data-label="種類" class="strike">${esc(it.type||"-")}</td>
+    <td data-label="メンバー" class="member strike">
+      <select class="cellSelect memberSel editOnly" data-member="${it.id}">
+        ${memberOptionHtml(it.member)}
+      </select>
+      <span class="previewMember hidden">${esc(it.member||"-")}</span>
+    </td>
+    <td data-label="衣装/柄">${esc(it.design||"-")}</td>
+    <td data-label="状態">
+      <select class="cellSelect editOnly" data-status="${it.id}">${stateOptions.map(s=>`<option ${it.status===s?"selected":""}>${s}</option>`).join("")}</select>
+      <span class="previewStatus hidden">${esc(it.status||"未交換")}</span>
+    </td>
+    <td data-label="メモ"><input class="note editOnly" data-memo="${it.id}" value="${esc(it.memo||"")}"><span class="previewMemo hidden">${esc(it.memo||"")}</span></td>
+    <td class="actions editOnly" data-label="操作"><button class="secondary" data-copy="${it.id}">複製</button> <button class="danger" data-del="${it.id}">削除</button></td>
+  `;
+}
+function buildGroupedTables(arr){
+  const groups = [
+    {key:"譲", title:"譲り", cls:"offer", items:arr.filter(it=>it.mode==="譲")},
+    {key:"求", title:"求む", cls:"want", items:arr.filter(it=>it.mode==="求")},
+    {key:"other", title:"その他", cls:"other", items:arr.filter(it=>it.mode!=="譲" && it.mode!=="求")}
+  ].filter(g=>g.items.length || filterSelect.value==="all");
+
+  groupedTables.innerHTML = groups.map(g=>{
+    const rows = g.items.map(it=>`<tr class="${checked[it.id]?"done":""}">${rowHtml(it)}</tr>`).join("");
+    return `
+      <div class="sectionTitle ${g.cls}">
+        <span>${g.title}</span>
+        <span>${g.items.length}点</span>
+      </div>
+      <table>
+        ${tableHeaderHtml()}
+        <tbody>${rows || `<tr><td colspan="10" style="text-align:center;color:var(--muted);padding:18px">該当なし</td></tr>`}</tbody>
+      </table>
+    `;
+  }).join("");
+}
+
+function buildExportGrouped(arr){
+  const groups = [
+    {title:"譲り", cls:"offer", items:arr.filter(it=>it.mode==="譲")},
+    {title:"求む", cls:"want", items:arr.filter(it=>it.mode==="求")},
+    {title:"その他", cls:"other", items:arr.filter(it=>it.mode!=="譲" && it.mode!=="求")}
+  ].filter(g=>g.items.length || filterSelect.value==="all");
+
+  exportGrouped.innerHTML = groups.map(g=>{
+    const cards = g.items.map(it=>{
+      const badgeClass=(it.rank||"").replace(/[^A-Za-zＡ-ＺA-Da-dSRN]/g,"").toUpperCase().slice(0,2)||"C";
+      const checkMark = checked[it.id] ? "交換決まり済" : it.status || "未交換";
+      const memo = it.memo ? `<div class="exportMeta">メモ：${esc(it.memo)}</div>` : "";
+      return `<div class="exportCard ${checked[it.id] ? "done" : ""}">
+        <div class="exportTop">
+          <span class="exportNo">No.${String(it.no).padStart(2,"0")}</span>
+          <span class="badge ${badgeClass}">${esc(it.rank||"-")}</span>
+          <span class="exportMember">${esc(it.member||"-")}</span>
+          <span class="exportStatus">${esc(checkMark)}</span>
+        </div>
+        <div class="exportMeta">種類：${esc(it.type||"-")}　/　衣装・柄：${esc(it.design||"-")}</div>
+        ${memo}
+      </div>`;
+    }).join("");
+    return `<div class="sectionTitle ${g.cls}"><span>${g.title}</span><span>${g.items.length}点</span></div>
+      <div class="exportList">${cards || `<div class="exportCard" style="color:var(--muted);text-align:center">該当なし</div>`}</div>`;
+  }).join("");
+}
+function render(){
+  applyHeader(); updateDictionaryUI();
+  const arr=filteredSorted();
+  buildGroupedTables(arr);
+  buildExportGrouped(arr);
+  document.querySelectorAll("input[type=checkbox][data-id]").forEach(cb=>cb.onchange=e=>{checked[e.target.dataset.id]=e.target.checked; save(); render()});
+  document.querySelectorAll("[data-mode]").forEach(sel=>sel.onchange=e=>{const it=items.find(x=>x.id===e.target.dataset.mode); if(it){it.mode=e.target.value; save(); render()}});
+  document.querySelectorAll("[data-member]").forEach(sel=>sel.onchange=e=>{
+    const it=items.find(x=>x.id===e.target.dataset.member);
+    if(!it) return;
+    if(e.target.value==="__custom__"){
+      const custom = prompt("メンバー名を入力してください", it.member || "");
+      if(custom !== null && custom.trim()) it.member = normalizeName(custom.trim());
+    }else{
+      it.member = normalizeName(e.target.value);
+    }
+    save(); render();
+  });
+  document.querySelectorAll("[data-status]").forEach(sel=>sel.onchange=e=>{const it=items.find(x=>x.id===e.target.dataset.status); if(it){it.status=e.target.value; save(); render()}});
+  document.querySelectorAll("[data-memo]").forEach(inp=>inp.onchange=e=>{const it=items.find(x=>x.id===e.target.dataset.memo); if(it){it.memo=e.target.value; save(); render()}});
+  document.querySelectorAll("[data-del]").forEach(btn=>btn.onclick=e=>{items=items.filter(x=>x.id!==e.target.dataset.del); delete checked[e.target.dataset.del]; renumber(); save(); render()});
+  document.querySelectorAll("[data-copy]").forEach(btn=>btn.onclick=e=>{const it=items.find(x=>x.id===e.target.dataset.copy); if(it){items.push({...it,id:uid(),no:items.length+1,status:"未交換"}); renumber(); save(); render()}});
+  const total=items.length, done=items.filter(it=>checked[it.id]).length, dupCount=Object.values(duplicateKeys()).filter(n=>n>=2).length;
+  sumTotal.textContent=total+"点"; sumOpen.textContent=(total-done)+"点"; sumDone.textContent=done+"点"; sumDupe.textContent=dupCount+"種";
+}
+function renumber(){items.forEach((it,i)=>it.no=i+1)}
+function currentRankInputValue(){
+  return template.value === "mobagacha" ? raritySelect.value : rankInput.value.trim();
+}
+function updateRankInputMode(){
+  const isMobagacha = template.value === "mobagacha";
+  rankTextWrap.classList.toggle("hidden", isMobagacha);
+  rankSelectWrap.classList.toggle("hidden", !isMobagacha);
+}
+function currentAddMemberName(){
+  if(memberInput.value === "__custom__"){
+    return normalizeName(memberCustomInput.value.trim());
+  }
+  return normalizeName(memberInput.value.trim());
+}
+function addItemFromFields(){
+  const qty=Math.max(1,parseInt(qtyInput.value||"1",10));
+  const base={rank:currentRankInputValue(), type:typeInput.value.trim(), member:currentAddMemberName(), design:designInput.value.trim(), mode:modeInput.value, memo:memoInput.value.trim(), status:statusInput.value};
+  for(let i=0;i<qty;i++) items.push({...base,id:uid(),no:items.length+1});
+  save(); render();
+}
+function importCSV(){
+  const text=csvInput.value.trim(); if(!text) return;
+  text.split(/\n+/).forEach(line=>{
+    const p=line.split(",").map(x=>x.trim()); if(p.length<3) return; if(/賞|レア度|種類/.test(p[0])&&/メンバー|種類/.test(line)) return;
+    const [rank,type,member,design,qtyRaw,modeRaw,statusRaw,memoRaw]=p; const qty=Math.max(1,parseInt(qtyRaw||"1",10)||1);
+    for(let i=0;i<qty;i++) items.push({id:uid(),no:items.length+1,rank,type,member:normalizeName(member),design:design||"",mode:modeRaw||"譲",status:statusRaw||"未交換",memo:memoRaw||""});
+  });
+  save(); render();
+}
+function setSample(){
+  titleInput.value="モバガチャ 交換チェックリスト";
+  subInput.value="譲・求と状態を後から変更できる版";
+  csvInput.value=`SR,アクリルスタンド,広本瑠璃,春ツアー衣装,1,求,未交換,
+R,缶バッジ,西崎美空,春ツアー衣装,2,譲,未交換,表記ゆれテスト
+N,ステッカー,北原もも,ロゴ柄,1,譲,交渉中,
+R,アクリルキーホルダー,米村姫良々,私服風,1,譲,交換決まり,
+N,ブロマイド,筒井澪心,ライブ衣装,1,求,未交換,`;
+  applyHeader();
+}
+function templateDefaults(){
+  updateRankInputMode();
+  const map={
+    lucky:"賞/レア度,種類,メンバー,衣装/柄,数量,譲求,状態,メモ\nB賞,A4クリアポスター,西﨑美空,ダントツ衣装,1,譲,未交換,",
+    mobagacha:"レア度,種類,メンバー,デザイン,数量,譲求,状態,メモ\nSR,アクリルスタンド,広本瑠璃,春ツアー,1,求,未交換,",
+    photo:"種類,写真,メンバー,衣装/ポーズ,数量,譲求,状態,メモ\nL判,生写真,北原もも,ライブ衣装A,2,譲,未交換,",
+    card:"レア度,カード,メンバー,絵柄/番号,数量,譲求,状態,メモ\nR,トレカ,西﨑美空,No.05,1,譲,未交換,",
+    badge:"レア度,グッズ,メンバー,デザイン,数量,譲求,状態,メモ\nN,缶バッジ,米村姫良々,ロゴ柄,1,譲,未交換,"
+  };
+  csvInput.placeholder=map[template.value]||csvInput.placeholder;
+}
+function copyText(){
+  const arr=filteredSorted().filter(it=>!checked[it.id]);
+  const text=arr.map(it=>`${it.mode}｜${it.status}｜${it.rank}｜${it.type}｜${it.member}｜${it.design}${it.memo?`｜${it.memo}`:""}`).join("\n");
+  navigator.clipboard.writeText(text||"未交換の項目はありません"); alert("交換用テキストをコピーしました");
+}
+function downloadBlob(content, filename, type){const blob=new Blob([content],{type}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename; a.click(); URL.revokeObjectURL(a.href)}
+function exportCSV(){
+  const header="No,譲求,賞/レア度,種類,メンバー,衣装/柄,状態,チェック済み,メモ\n";
+  const body=items.map(it=>[it.no,it.mode,it.rank,it.type,it.member,it.design,it.status,checked[it.id]?"済":"",it.memo].map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\n");
+  downloadBlob(header+body,"trade_check_list.csv","text/csv;charset=utf-8");
+}
+
+addBtn.onclick=addItemFromFields; importBtn.onclick=importCSV; sampleBtn.onclick=setSample;
+clearInputBtn.onclick=()=>{
+  ["rankInput","typeInput","designInput","memoInput"].forEach(id=>document.getElementById(id).value="");
+  memberCustomInput.value="";
+  memberInput.selectedIndex=0;
+  memberCustomInput.classList.add("hidden");
+};
+titleInput.oninput=applyHeader; subInput.oninput=applyHeader; theme.onchange=applyHeader; template.onchange=()=>{templateDefaults(); updateRankInputMode();};
+memberInput.onchange=()=>{memberCustomInput.classList.toggle("hidden", memberInput.value !== "__custom__");};
+dictionarySelect.onchange=e=>{currentDict=e.target.value; save(); updateDictionaryUI(); render()};
+fixNamesBtn.onclick=()=>{items.forEach(it=>it.member=normalizeName(it.member)); save(); render()};
+sortPreset.onchange=()=>{applySortPreset(); render();};
+sort1.onchange=()=>{sortPreset.value="custom"; render();};
+sort2.onchange=()=>{sortPreset.value="custom"; render();};
+sort3.onchange=()=>{sortPreset.value="custom"; render();};
+filterSelect.onchange=render; searchInput.oninput=render;
+resetCheckBtn.onclick=()=>{if(confirm("チェックを全部外しますか？")){checked={}; save(); render()}};
+copyTextBtn.onclick=copyText; exportCsvBtn.onclick=exportCSV;
+saveJsonBtn.onclick=()=>downloadBlob(JSON.stringify({title:titleInput.value,subtitle:subInput.value,theme:theme.value,dictionary:currentDict,items,checked},null,2),"trade_check_data.json","application/json");
+loadJsonBtn.onclick=()=>fileInput.click();
+fileInput.onchange=async e=>{const f=e.target.files[0]; if(!f)return; try{const data=JSON.parse(await f.text()); items=data.items||[]; checked=data.checked||{}; titleInput.value=data.title||"グッズ交換チェックリスト"; subInput.value=data.subtitle||"交換決まり済みをチェックして管理"; theme.value=data.theme||"#d71920"; currentDict=data.dictionary||"all"; dictionarySelect.value=currentDict; renumber(); save(); render()}catch(err){alert("読み込みに失敗しました")}};
+savePngBtn.onclick=async()=>{
+  document.body.classList.add("previewOnly");
+  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember").forEach(x=>x.classList.remove("hidden"));
+  await new Promise(r=>setTimeout(r,80));
+  const canvas=await html2canvas(captureContent,{scale:2,backgroundColor:"#fffdf8", windowWidth:1100});
+  document.body.classList.remove("previewOnly");
+  document.querySelectorAll(".previewStatus,.previewMemo,.previewMode,.previewMember").forEach(x=>x.classList.add("hidden"));
+  const a=document.createElement("a"); a.href=canvas.toDataURL("image/png"); a.download="trade_check_list.png"; a.click();
+};
+
+loadSettings();
+if(items.length===0){
+  items=[
+    {id:uid(),no:1,mode:"譲",rank:"B賞",type:"A4クリアポスター",member:"西﨑美空",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
+    {id:uid(),no:2,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"北原もも",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
+    {id:uid(),no:3,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"北原もも",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
+    {id:uid(),no:4,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"米村姫良々",design:"『また、あなたに恋焦がれているんだ』衣装",status:"未交換",memo:""},
+    {id:uid(),no:5,mode:"譲",rank:"C賞",type:"オリジナルチェキ",member:"筒井澪心",design:"『また、あなたに恋焦がれているんだ』衣装",status:"未交換",memo:""},
+    {id:uid(),no:6,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"中山夏月姫",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
+    {id:uid(),no:7,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"広本瑠璃",design:"『ダントツで愛して』衣装",status:"未交換",memo:""},
+    {id:uid(),no:8,mode:"譲",rank:"D賞",type:"撮りおろし版ブロマイド",member:"窪田七海",design:"『ダントツで愛して』衣装",status:"未交換",memo:""}
+  ];
+}
+templateDefaults(); updateRankInputMode(); applySortPreset(); render();
+</script>
+</body>
+</html>
